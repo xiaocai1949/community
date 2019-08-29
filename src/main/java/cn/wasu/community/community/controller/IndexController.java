@@ -5,6 +5,7 @@ import cn.wasu.community.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +20,9 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request) {
         Cookie [] cookies=request.getCookies();
+        if(ObjectUtils.isEmpty(cookies)){
+            return "index";
+        }
         for(Cookie cookie:cookies){
             if(cookie.getName().equals("token")){
                 String token=cookie.getValue();
