@@ -50,11 +50,12 @@ public class AuthController {
         GithubUser githubUser=githubProvider.githubUser(accessToken);
         System.out.printf(githubUser.getName());
         //根据是否获取到User判断是否登录成功
-        if(!ObjectUtils.isEmpty(githubUser)){
+        if(!ObjectUtils.isEmpty(githubUser)&&githubUser.getId()!=null){
             //登录成功,显示name
             User user = new User();
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setCreateTime(System.currentTimeMillis());
