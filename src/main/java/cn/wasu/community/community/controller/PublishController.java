@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
     @Autowired
     private QuestionMapper questionMapper;
+
     @Autowired
     private UserMapper userMapper;
+
     @GetMapping(value = "/publish")
     public String publish(){
         return "publish";
@@ -44,13 +46,13 @@ public class PublishController {
             model.addAttribute("error","标签不能为空!");
             return "publish";
         }
-        Cookie []cookies=request.getCookies();
-        User user=null;
+        User user= null;
+        Cookie[] cookies=request.getCookies();
         if(!ObjectUtils.isEmpty(cookies)){
-            for (Cookie cookie:cookies){
+            for(Cookie cookie:cookies){
                 if(cookie.getName().equals("token")){
                     String token=cookie.getValue();
-                    user=userMapper.findByToken(token);
+                    user=userMapper.findByToken( token);
                     if(user!=null){
                         request.getSession().setAttribute("user",user);
                     }
