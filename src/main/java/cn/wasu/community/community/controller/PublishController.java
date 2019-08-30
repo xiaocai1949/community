@@ -45,19 +45,17 @@ public class PublishController {
             return "publish";
         }
         Cookie []cookies=request.getCookies();
-        if(ObjectUtils.isEmpty(cookies)){
-            model.addAttribute("error","cookies is null!");
-            return "publish";
-        }
         User user=null;
-        for (Cookie cookie:cookies){
-            if(cookie.getName().equals("token")){
-                String token=cookie.getValue();
-                user=userMapper.findByToken(token);
-                if(user!=null){
-                    request.getSession().setAttribute("user",user);
+        if(!ObjectUtils.isEmpty(cookies)){
+            for (Cookie cookie:cookies){
+                if(cookie.getName().equals("token")){
+                    String token=cookie.getValue();
+                    user=userMapper.findByToken(token);
+                    if(user!=null){
+                        request.getSession().setAttribute("user",user);
+                    }
+                    break;
                 }
-                break;
             }
         }
         if(ObjectUtils.isEmpty(user)){

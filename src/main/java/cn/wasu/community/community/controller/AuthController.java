@@ -55,7 +55,7 @@ public class AuthController {
             User user = new User();
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
-            user.setAvatarUrl(githubUser.getAvatar_url());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setCreateTime(System.currentTimeMillis());
