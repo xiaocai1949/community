@@ -29,7 +29,7 @@ public class PublishController {
     }
 
     @GetMapping(value = "/publish/{id}")
-    public String edit(@PathVariable("id")Integer id,Model model){
+    public String edit(@PathVariable("id")Long id,Model model){
         //通过Id获取question对象
         QuestionDTO question=questionService.getById(id);
         //数据页面回显
@@ -41,7 +41,7 @@ public class PublishController {
     }
 
     @PostMapping(value = "/publish")
-    public String doPublish(@RequestParam(value = "title")String title,@RequestParam(value = "id")Integer id,
+    public String doPublish(@RequestParam(value = "title")String title,@RequestParam(value = "id")Long id,
                             @RequestParam(value = "description")String description,
                             @RequestParam(value = "tag")String tag, HttpServletRequest request, Model model){
         model.addAttribute("title",title);

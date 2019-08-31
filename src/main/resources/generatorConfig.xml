@@ -31,7 +31,8 @@
         </javaClientGenerator>
 
         <table tableName="user" domainObjectName="User" ></table>
-        <table tableName="question" domainObjectName="Question" >
+        <table tableName="question" domainObjectName="Question" ></table>
+        <table tableName="comment" domainObjectName="Comment" >
             <!--<property name="useActualColumnNames" value="true"/>-->
         </table>
         <!--useActualColumnNames驼峰命名配置，默认false-->

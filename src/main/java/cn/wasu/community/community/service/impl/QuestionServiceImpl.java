@@ -65,7 +65,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         //数据总数
         PaginationDTO paginationDTO=new PaginationDTO();
         Integer totalPage;
@@ -105,7 +105,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question= questionMapper.selectByPrimaryKey(id);
         if(ObjectUtils.isEmpty(question)){
             throw new CustomizeException(CustomizaErrorCode.QUESTION_NOT_FOUND);
@@ -124,6 +124,9 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         }else {
             //更新
@@ -144,7 +147,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question=new Question();
         question.setId(id);
         question.setViewCount(1);
