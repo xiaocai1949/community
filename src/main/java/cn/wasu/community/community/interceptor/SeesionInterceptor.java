@@ -2,6 +2,7 @@ package cn.wasu.community.community.interceptor;
 
 import cn.wasu.community.community.mapper.UserMapper;
 import cn.wasu.community.community.model.User;
+import cn.wasu.community.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public class SeesionInterceptor implements HandlerInterceptor {
@@ -23,9 +25,13 @@ public class SeesionInterceptor implements HandlerInterceptor {
             for(Cookie cookie:cookies){
                 if(cookie.getName().equals("token")){
                     String token=cookie.getValue();
-                    User user=userMapper.findByToken( token);
-                    if(user!=null){
-                        request.getSession().setAttribute("user",user);
+                    UserExample example = new UserExample();
+                    example.createCriteria().andTokenEqualTo(token);
+                    userMapper.selectByExample(example);
+                    List<User>users=userMapper.selectByExample(example);
+                   /* User user=userMapper.findByToken( token);*/
+                    if(users.size()!=0){
+                        request.getSession().setAttribute("user",users.get(0));
                     }
                     break;
                 }

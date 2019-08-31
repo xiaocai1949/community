@@ -5,6 +5,7 @@ import cn.wasu.community.community.dto.GithubUser;
 import cn.wasu.community.community.mapper.UserMapper;
 import cn.wasu.community.community.model.User;
 import cn.wasu.community.community.provider.GithubProvider;
+import cn.wasu.community.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
@@ -34,7 +35,7 @@ public class AuthController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping(value = "callback")
     public String callback(@RequestParam(name = "code")String code,
@@ -48,7 +49,6 @@ public class AuthController {
         accessTokenDTO.setState(state);
         String accessToken= githubProvider.getAccesstoken(accessTokenDTO);
         GithubUser githubUser=githubProvider.githubUser(accessToken);
-        System.out.printf(githubUser.getName());
         //根据是否获取到User判断是否登录成功
         if(!ObjectUtils.isEmpty(githubUser)&&githubUser.getId()!=null){
             //登录成功,显示name
@@ -58,9 +58,8 @@ public class AuthController {
             user.setAvatarUrl(githubUser.getAvatarUrl());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setCreateTime(System.currentTimeMillis());
-            user.setModifyTime(user.getCreateTime());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
+//            userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
 //            request.getSession().setAttribute("user",githubUser);
             return "redirect:/";
@@ -68,5 +67,16 @@ public class AuthController {
             //登录失败，返回首页，不显示name
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        //移除session中user对象
+        request.getSession().removeAttribute("user");
+        //清空cookie
+        Cookie cookie=new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
