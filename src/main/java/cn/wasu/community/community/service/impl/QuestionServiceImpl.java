@@ -2,6 +2,8 @@ package cn.wasu.community.community.service.impl;
 
 import cn.wasu.community.community.dto.PaginationDTO;
 import cn.wasu.community.community.dto.QuestionDTO;
+import cn.wasu.community.community.exception.CustomizaErrorCode;
+import cn.wasu.community.community.exception.CustomizeException;
 import cn.wasu.community.community.mapper.QuestionMapper;
 import cn.wasu.community.community.mapper.UserMapper;
 import cn.wasu.community.community.model.Question;
@@ -102,6 +104,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDTO getById(Integer id) {
         Question question= questionMapper.selectByPrimaryKey(id);
+        if(ObjectUtils.isEmpty(question)){
+            throw new CustomizeException(CustomizaErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user=userMapper.selectByPrimaryKey(question.getCreator());
@@ -128,7 +133,10 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            int update=questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if(update!=1){
+                throw new CustomizeException(CustomizaErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
