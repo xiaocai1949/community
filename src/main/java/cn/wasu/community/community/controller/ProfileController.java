@@ -19,27 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
     @Autowired
     private QuestionService questionService;
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name="action")String action, Model model, HttpServletRequest request,
                           @RequestParam(value = "page",defaultValue = "1")Integer page,
                           @RequestParam(value = "size",defaultValue = "5")Integer size){
-        User user= null;
-        Cookie[] cookies=request.getCookies();
-        if(!ObjectUtils.isEmpty(cookies)){
-            for(Cookie cookie:cookies){
-                if(cookie.getName().equals("token")){
-                    String token=cookie.getValue();
-                    user=userMapper.findByToken( token);
-                    if(user!=null){
-                        request.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user= (User) request.getSession().getAttribute("user");
         if(ObjectUtils.isEmpty(user)){
             return "redirect:/";
         }
