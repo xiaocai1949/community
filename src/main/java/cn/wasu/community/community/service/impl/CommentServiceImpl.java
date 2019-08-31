@@ -11,6 +11,8 @@ import cn.wasu.community.community.model.Question;
 import cn.wasu.community.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -24,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private QuestionExtMapper questionExtMapper;
 
     @Override
+    @Transactional
     public void insert(Comment comment) {
         if(comment.getParentId()==null||comment.getParentId()==0){
             throw new CustomizeException(CustomizaErrorCode.TARGET_PARAM_NOT_FOUND);
