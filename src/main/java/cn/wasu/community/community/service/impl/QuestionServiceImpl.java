@@ -4,6 +4,7 @@ import cn.wasu.community.community.dto.PaginationDTO;
 import cn.wasu.community.community.dto.QuestionDTO;
 import cn.wasu.community.community.exception.CustomizaErrorCode;
 import cn.wasu.community.community.exception.CustomizeException;
+import cn.wasu.community.community.mapper.QuestionExtMapper;
 import cn.wasu.community.community.mapper.QuestionMapper;
 import cn.wasu.community.community.mapper.UserMapper;
 import cn.wasu.community.community.model.Question;
@@ -23,6 +24,8 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
     @Override
@@ -138,5 +141,13 @@ public class QuestionServiceImpl implements QuestionService {
                 throw new CustomizeException(CustomizaErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    @Override
+    public void incView(Integer id) {
+        Question question=new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
