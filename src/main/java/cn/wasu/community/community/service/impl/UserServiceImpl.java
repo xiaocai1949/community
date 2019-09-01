@@ -21,21 +21,21 @@ public class UserServiceImpl implements UserService {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
                 .andAccountIdEqualTo(user.getAccountId());
-        List<User> users= userMapper.selectByExample(userExample);
+        List<User> users = userMapper.selectByExample(userExample);
         //判断user是否已存在
-        if(ObjectUtils.isEmpty(users)&&users.size()==0){
+        if (ObjectUtils.isEmpty(users) && users.size() == 0) {
             //插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-        }else {
+        } else {
             //更新
-            User dbUser=users.get(0);
+            User dbUser = users.get(0);
             dbUser.setGmtModified(System.currentTimeMillis());
             dbUser.setAvatarUrl(user.getAvatarUrl());
             dbUser.setName(user.getName());
             dbUser.setToken(user.getToken());
-            User updteUser=new User();
+            User updteUser = new User();
             updteUser.setGmtModified(System.currentTimeMillis());
             updteUser.setAvatarUrl(user.getAvatarUrl());
             updteUser.setName(user.getName());
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
             UserExample example = new UserExample();
             example.createCriteria()
                     .andIdEqualTo(dbUser.getId());
-            userMapper.updateByExampleSelective(updteUser,new UserExample());
+            userMapper.updateByExampleSelective(updteUser, new UserExample());
         }
     }
 }

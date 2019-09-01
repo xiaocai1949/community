@@ -24,44 +24,44 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping(value = "/publish")
-    public String publish(){
+    public String publish() {
         return "publish";
     }
 
     @GetMapping(value = "/publish/{id}")
-    public String edit(@PathVariable("id")Long id,Model model){
+    public String edit(@PathVariable("id") Long id, Model model) {
         //通过Id获取question对象
-        QuestionDTO question=questionService.getById(id);
+        QuestionDTO question = questionService.getById(id);
         //数据页面回显
-        model.addAttribute("title",question.getTitle());
-        model.addAttribute("description",question.getDescription());
-        model.addAttribute("tag",question.getTag());
-        model.addAttribute("id",question.getId());
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
         return "publish";
     }
 
     @PostMapping(value = "/publish")
-    public String doPublish(@RequestParam(value = "title")String title,@RequestParam(value = "id")Long id,
-                            @RequestParam(value = "description")String description,
-                            @RequestParam(value = "tag")String tag, HttpServletRequest request, Model model){
-        model.addAttribute("title",title);
-        model.addAttribute("description",description);
-        model.addAttribute("tag",tag);
-        if(ObjectUtils.isEmpty(title)){
-            model.addAttribute("error","标题不能为空!");
+    public String doPublish(@RequestParam(value = "title") String title, @RequestParam(value = "id") Long id,
+                            @RequestParam(value = "description") String description,
+                            @RequestParam(value = "tag") String tag, HttpServletRequest request, Model model) {
+        model.addAttribute("title", title);
+        model.addAttribute("description", description);
+        model.addAttribute("tag", tag);
+        if (ObjectUtils.isEmpty(title)) {
+            model.addAttribute("error", "标题不能为空!");
             return "publish";
         }
-        if(ObjectUtils.isEmpty(description)){
-            model.addAttribute("error","内容不能为空!");
+        if (ObjectUtils.isEmpty(description)) {
+            model.addAttribute("error", "内容不能为空!");
             return "publish";
         }
-        if(ObjectUtils.isEmpty(tag)){
-            model.addAttribute("error","标签不能为空!");
+        if (ObjectUtils.isEmpty(tag)) {
+            model.addAttribute("error", "标签不能为空!");
             return "publish";
         }
-        User user= (User) request.getSession().getAttribute("user");
-        if(ObjectUtils.isEmpty(user)){
-            model.addAttribute("error","用户未登录!");
+        User user = (User) request.getSession().getAttribute("user");
+        if (ObjectUtils.isEmpty(user)) {
+            model.addAttribute("error", "用户未登录!");
             return "publish";
         }
         Question question = new Question();

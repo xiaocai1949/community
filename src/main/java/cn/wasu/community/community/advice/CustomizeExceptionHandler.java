@@ -22,31 +22,31 @@ import java.io.PrintWriter;
 public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     ModelAndView handle(Throwable ex, Model model, HttpServletRequest request, HttpServletResponse response) {
-        String contentType=request.getContentType();
-        if("application/json".equals(contentType)){
+        String contentType = request.getContentType();
+        if ("application/json".equals(contentType)) {
             ResultDTO resultDTO;
             //返回json
-            if(ex instanceof CustomizeException){
-                resultDTO=ResultDTO.errorof((CustomizeException) ex);
-            }else {
-                resultDTO=ResultDTO.errorof(CustomizaErrorCode.SYS_ERROR);
+            if (ex instanceof CustomizeException) {
+                resultDTO = ResultDTO.errorof((CustomizeException) ex);
+            } else {
+                resultDTO = ResultDTO.errorof(CustomizaErrorCode.SYS_ERROR);
             }
             try {
                 response.setCharacterEncoding("utf-8");
                 response.setStatus(200);
                 response.setContentType("application/json");
-                PrintWriter writer=response.getWriter();
+                PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(resultDTO));
                 writer.close();
             } catch (Exception e) {
             }
             return null;
-        }else {
+        } else {
             //错误页面跳转
-            if(ex instanceof CustomizeException){
-                model.addAttribute("message",ex.getMessage());
-            }else {
-                model.addAttribute("message",CustomizaErrorCode.SYS_ERROR);
+            if (ex instanceof CustomizeException) {
+                model.addAttribute("message", ex.getMessage());
+            } else {
+                model.addAttribute("message", CustomizaErrorCode.SYS_ERROR);
             }
             return new ModelAndView("error");
         }
