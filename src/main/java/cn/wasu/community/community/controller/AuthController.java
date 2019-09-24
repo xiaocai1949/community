@@ -80,14 +80,4 @@ public class AuthController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "test")
-    public String test(HttpServletRequest request,HttpServletResponse response){
-        //移除session中user对象
-        request.getSession().removeAttribute("user");
-        //清空cookie
-        Cookie cookie=new Cookie("token",null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-        return "redirect:/";
-    }
 }
